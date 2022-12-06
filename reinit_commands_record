@@ -1,0 +1,3 @@
+#!/bin/bash
+sudo rm /var/log/commands.log
+sudo systemctl restart rsyslog

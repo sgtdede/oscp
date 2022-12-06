@@ -1,0 +1,5 @@
+#!/bin/bash
+rm -rf commands
+mkdir commands
+cp /var/log/commands.log commands/commands.context
+head -n -1 /var/log/commands.log | awk -F " --- " '{print $2}' > commands/commands
