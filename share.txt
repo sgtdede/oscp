@@ -1,0 +1,149 @@
+├── linux
+│   ├── chisel
+│   ├── chisel86
+│   ├── gost64.elf
+│   ├── gost86.elf
+│   ├── LinEnum.sh
+│   ├── linpeas.sh
+│   ├── linux-exploit-suggester-2.pl
+│   ├── metl64
+│   ├── metl86
+│   └── privesc
+│       ├── kernel-exploits
+│       │   ├── dirtycow
+│       │   │   └── c0w.c
+│       │   └── linux-exploit-suggester-2
+│       │       ├── LICENSE
+│       │       ├── linux-exploit-suggester-2.pl
+│       │       └── README.md
+│       ├── mysql-udf
+│       │   ├── raptor_udf2.c
+│       │   ├── raptor_udf2.o
+│       │   └── raptor_udf2.so
+│       ├── nginx
+│       │   └── nginxed-root.sh
+│       ├── privesc-scripts
+│       │   ├── LinEnum.sh
+│       │   ├── linpeas.sh
+│       │   └── lse.sh
+│       ├── sudo
+│       │   ├── library_path.c
+│       │   └── preload.c
+│       └── suid
+│           ├── exim
+│           │   └── cve-2016-1531.sh
+│           ├── libcalc.c
+│           └── service.c
+└── windows
+    ├── addadminuser.exe
+    ├── chisel86.exe
+    ├── chisel.exe
+    ├── fgdump.exe
+    ├── ghostpack_binaries
+    │   ├── Certify.exe
+    │   ├── dotnet v3.5 compiled binaries
+    │   │   ├── LockLess.exe
+    │   │   ├── Rubeus.exe
+    │   │   ├── SafetyKatz.exe
+    │   │   ├── Seatbelt.exe
+    │   │   ├── SharpChrome.exe
+    │   │   ├── SharpDPAPI.exe
+    │   │   ├── SharpDump.exe
+    │   │   ├── SharpRoast.exe
+    │   │   ├── SharpUp.exe
+    │   │   └── SharpWMI.exe
+    │   ├── dotnet v4.5 compiled binaries
+    │   │   ├── Certify.exe
+    │   │   ├── ForgeCert.exe
+    │   │   ├── Koh.exe
+    │   │   ├── LockLess.exe
+    │   │   ├── RestrictedAdmin.exe
+    │   │   ├── Rubeus.exe
+    │   │   ├── SafetyKatz.exe
+    │   │   ├── Seatbelt.exe
+    │   │   ├── SharpChrome.exe
+    │   │   ├── SharpDPAPI.exe
+    │   │   ├── SharpDump.exe
+    │   │   ├── SharpRoast.exe
+    │   │   ├── SharpUp.exe
+    │   │   └── SharpWMI.exe
+    │   ├── dotnet v4.7.2 compiled binaries
+    │   │   ├── Certify.exe
+    │   │   ├── ForgeCert.exe
+    │   │   ├── Koh.exe
+    │   │   ├── LockLess.exe
+    │   │   ├── RestrictedAdmin.exe
+    │   │   ├── Rubeus.exe
+    │   │   ├── SafetyKatz.exe
+    │   │   ├── Seatbelt.exe
+    │   │   ├── SharpChrome.exe
+    │   │   ├── SharpDPAPI.exe
+    │   │   ├── SharpDump.exe
+    │   │   ├── SharpRoast.exe
+    │   │   ├── SharpUp.exe
+    │   │   └── SharpWMI.exe
+    │   ├── Koh.exe
+    │   ├── LockLess.exe
+    │   ├── mimikatz.exe
+    │   ├── README.md
+    │   ├── RestrictedAdmin.exe
+    │   ├── Rubeus.exe
+    │   ├── SafetyKatz.exe
+    │   ├── Seatbelt.exe
+    │   ├── SharpChrome.exe
+    │   ├── SharpDPAPI.exe
+    │   ├── SharpDump.exe
+    │   ├── SharpRoast.exe
+    │   ├── SharpUp.exe
+    │   ├── SharpWMI.exe
+    │   ├── Win32
+    │   │   ├── mimidrv.sys
+    │   │   ├── mimikatz.exe
+    │   │   ├── mimilib.dll
+    │   │   └── mimilove.exe
+    │   └── x64
+    │       ├── mimidrv.sys
+    │       ├── mimikatz.exe
+    │       └── mimilib.dll
+    ├── gost.exe
+    ├── gost-windows-386.exe
+    ├── lpe
+    │   ├── CLSID.list
+    │   ├── JuicyPotato.exe
+    │   ├── PrintSpoofer32.exe
+    │   ├── PrintSpoofer64.exe
+    │   ├── SpoolFool
+    │   │   ├── AddUser.dll
+    │   │   ├── SpoolFool.exe
+    │   │   └── SpoolFool.ps1
+    │   ├── test_clsid.bat
+    │   ├── winPEASany.exe
+    │   └── winPEAS.bat
+    ├── mimi2.1
+    │   ├── mimi32.exe
+    │   └── mimikatz.exe
+    ├── mimi86.exe
+    ├── mimikatz.exe
+    ├── netcat
+    │   ├── nc64.exe
+    │   └── nc.exe
+    ├── powercat.ps1
+    ├── powersploit
+    ├── privesc
+    │   ├── accesschk.exe
+    │   ├── CreateShortcut.vbs
+    │   ├── plink.exe
+    │   ├── PowerUp.ps1
+    │   ├── PrintSpoofer.exe
+    │   ├── Procmon64.exe
+    │   ├── RoguePotato.exe
+    │   ├── Seatbelt.exe
+    │   ├── SharpUp.exe
+    │   └── winPEASany.exe
+    ├── procexp64.exe
+    ├── procexp.exe
+    ├── revshell443.exe
+    ├── revshell80.exe
+    ├── SharpHound.exe
+    ├── SharpHound.ps1
+    └── sysinternals
