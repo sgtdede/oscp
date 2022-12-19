@@ -4,7 +4,7 @@ OSCP preparation tools, scripts and cheatsheets
 ```
 ├── armageddon.txt                            ==> ultimate OSCP Cheat Sheet
 ├── environment                 
-│   ├── bookmarks.html                        ==> browsers link useful for OSCP/hacking/pentest
+│   ├── bookmarks.html                        ==> browser bookmarks useful for OSCP/hacking/pentest
 │   ├── log_everything                        ==> 2 scripts allowing easy export of all commands executed during a pentest/lab/session
 │   │   ├── export_commands
 │   │   └── reinit_commands_record
